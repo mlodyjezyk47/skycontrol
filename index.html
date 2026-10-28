@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c111b">
+  <meta name="description" content="SkyControl — interaktywny, demonstracyjny panel zarządzania operacjami lotniskowymi.">
+  <title>SkyControl — Centrum operacyjne</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script>
+    try { if (localStorage.getItem('skycontrol.theme.v1') === 'light') document.documentElement.dataset.theme = 'light'; } catch (error) { /* Motyw ciemny działa także bez pamięci przeglądarki. */ }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#flight-board">Przejdź do tablicy lotów</a>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="m22 2-11 11"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-flights" viewBox="0 0 24 24"><path d="M3 21h18M3 6l7 3 7-6 3 1-5 7 5 2-2 2L3 11Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2.7 7M3 4v7h7M12 7v5l3 2"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4.2 1.8c-1 .7-1.7 1-1.7 2.2M12 17h.01"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.3"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 5h.01M12 16h.01M16 16h.01"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 24 24"><path d="M8 4v16m-4-4 4 4 4-4M16 20V4m-4 4 4-4 4 4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/></symbol>
+  </svg>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+  <aside class="sidebar" id="sidebar" aria-label="Panel nawigacji">
+    <button class="icon-button sidebar-close" id="sidebar-close" type="button" aria-label="Zamknij menu"><svg class="icon"><use href="#i-close"/></svg></button>
+    <a class="brand" href="#overview" aria-label="SkyControl — strona główna">
+      <span class="brand-mark"><svg class="icon"><use href="#i-plane"/></svg></span>
+      <span>Sky<span class="brand-light">Control</span><span class="brand-caption">AIRPORT OPERATIONS</span></span>
+    </a>
+    <div class="airport-card">
+      <div class="airport-code"><svg class="icon"><use href="#i-pin"/></svg><strong>WAW</strong><span>EPWA</span></div>
+      <p>Warszawa Chopina</p>
+      <span class="airport-country">Warszawa, Polska</span>
+    </div>
+    <p class="nav-label">PRZESTRZEŃ ROBOCZA</p>
+    <nav class="primary-nav" aria-label="Nawigacja główna">
+      <a class="nav-item active" href="#overview" data-nav="overview" aria-current="page"><svg class="icon"><use href="#i-grid"/></svg><span>Przegląd</span><span class="nav-active-dot"></span></a>
+      <a class="nav-item" href="#flight-board" data-nav="flight-board"><svg class="icon"><use href="#i-flights"/></svg><span>Tablica lotów</span><span class="nav-count">10</span></a>
+      <button class="nav-item" type="button" id="history-button"><svg class="icon"><use href="#i-history"/></svg><span>Dziennik operacji</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="demo-card"><span class="demo-symbol"><svg class="icon"><use href="#i-shield"/></svg></span><strong>Tryb demonstracyjny</strong><p>Przestrzeń do odkrywania.<br>Wszystko pod Twoją kontrolą.</p><span class="demo-tag"><span class="status-dot"></span>Dane przykładowe</span></div>
+      <button class="nav-item help-link" type="button" id="help-button"><svg class="icon"><use href="#i-help"/></svg><span>Pomoc i informacje</span><svg class="icon small"><use href="#i-chevron"/></svg></button>
+      <div class="operator"><span class="avatar">OP</span><span><strong>Operator lotniska</strong><small>Przestrzeń lokalna</small></span><span class="operator-dot" title="Panel działa lokalnie"></span></div>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-left"><button class="icon-button menu-button" id="menu-button" type="button" aria-label="Otwórz menu" aria-expanded="false" aria-controls="sidebar"><svg class="icon"><use href="#i-menu"/></svg></button><span class="breadcrumb">SkyControl <svg class="icon"><use href="#i-chevron"/></svg><strong>Centrum operacyjne</strong></span></div>
+      <div class="topbar-actions"><span class="live-indicator"><span></span>Panel aktywny</span><span class="topbar-separator"></span><div class="live-clock"><svg class="icon"><use href="#i-clock"/></svg><time id="clock">--:--:--</time><span id="timezone-label">WAW</span></div><button class="icon-button theme-button" type="button" id="theme-button" aria-label="Włącz jasny motyw" aria-pressed="false" title="Włącz jasny motyw"><svg class="icon"><use id="theme-icon" href="#i-sun"/></svg></button></div>
+    </header>
+
+    <main id="overview">
+      <div class="page-heading">
+        <div><p class="eyebrow"><span></span>TWÓJ PORT. TWOJA PERSPEKTYWA.</p><h1>Przegląd operacji<span>.</span></h1><p class="heading-description">Każdy lot, każdy kierunek. Wszystko pod kontrolą.</p></div>
+        <div class="heading-actions"><span class="date-chip"><svg class="icon"><use href="#i-calendar"/></svg><time id="current-date">Trwa wczytywanie daty…</time></span><button class="button button-primary" type="button" id="export-button"><svg class="icon"><use href="#i-download"/></svg>Eksportuj CSV</button></div>
+      </div>
+      <div class="storage-warning" id="storage-warning" role="status" hidden><svg class="icon"><use href="#i-info"/></svg><span id="storage-warning-text">Przeglądarka blokuje zapisywanie. Zmiany będą dostępne tylko do zamknięcia strony.</span></div>
+      <noscript><p class="storage-warning">Aby korzystać z wyszukiwarki i zmieniać statusy, włącz JavaScript w ustawieniach przeglądarki.</p></noscript>
+
+      <section class="stats-grid" id="statistics" aria-label="Podsumowanie lotów">
+        <div class="stat-card stat-total"><div class="stat-top"><span>Wszystkie loty</span><span class="stat-icon"><svg class="icon"><use href="#i-flights"/></svg></span></div><div class="stat-bottom"><div><strong id="count-all">10</strong><p>Dzisiejszy plan operacji</p></div><svg class="sparkline blue" viewBox="0 0 110 40" aria-hidden="true"><path class="spark-fill" d="M2 35 15 26 27 30 41 18 53 23 67 10 80 16 95 5 108 9V40H2Z"/><path d="m2 35 13-9 12 4 14-12 12 5 14-13 13 6 15-11 13 4"/></svg></div></div>
+        <div class="stat-card"><div class="stat-top"><span>W trakcie</span><span class="stat-icon stat-blue"><svg class="icon"><use href="#i-plane"/></svg></span></div><div class="stat-bottom"><div><strong id="count-active">3</strong><p><span class="mini-dot blue-bg"></span>Operacje w toku</p></div><span class="stat-label blue-label">W REALIZACJI</span></div></div>
+        <div class="stat-card"><div class="stat-top"><span>Zakończone</span><span class="stat-icon stat-green"><svg class="icon"><use href="#i-check-circle"/></svg></span></div><div class="stat-bottom"><div><strong id="count-completed">3</strong><p><span class="mini-dot green-bg"></span>Zrealizowane operacje</p></div><span class="stat-label green-label" id="completion-chip">30% PLANU</span></div></div>
+        <div class="stat-card"><div class="stat-top"><span>Planowane</span><span class="stat-icon stat-amber"><svg class="icon"><use href="#i-clock"/></svg></span></div><div class="stat-bottom"><div><strong id="count-planned">4</strong><p><span class="mini-dot amber-bg"></span>Gotowe na kolejny krok</p></div><span class="stat-label amber-label">W PLANIE</span></div></div>
+      </section>
+
+      <section class="overview-grid" aria-label="Kierunki i realizacja planu">
+        <div class="panel route-panel">
+          <div class="panel-heading"><div><h2>Stąd w świat <span class="subtle-slash">/</span> <span class="muted-heading">Siatka połączeń</span></h2><p>Warszawa Chopina <span class="text-dot">·</span> 10 europejskich kierunków</p></div><span class="small-chip">WAW <svg class="icon"><use href="#i-arrow"/></svg> EUROPA</span></div>
+          <div class="map-container">
+            <svg class="route-map" viewBox="0 0 830 250" role="img" aria-labelledby="map-title map-description">
+              <title id="map-title">Przykładowe połączenia z Warszawy</title><desc id="map-description">Poglądowa mapa tras do Londynu, Paryża, Frankfurtu, Amsterdamu, Rzymu, Barcelony, Oslo, Helsinek, Wiednia i Zurychu.</desc>
+              <defs><pattern id="map-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" class="map-grid-line"/></pattern><radialGradient id="map-glow"><stop stop-color="#3983ff" stop-opacity=".12"/><stop offset="1" stop-color="#3983ff" stop-opacity="0"/></radialGradient><filter id="hub-glow"><feGaussianBlur stdDeviation="3"/></filter></defs>
+              <rect width="830" height="250" fill="url(#map-grid)"/><ellipse cx="497" cy="112" rx="290" ry="165" fill="url(#map-glow)"/>
+              <g class="map-land"><path d="m185 224 7-21 27-2 8-13 48 0 12 10 24-9 15-22-10-21 14-20 13-2 7-19 16-2-1-16 22-12 18 7 17-11 18 4 21-10 22 5 18-10 18 8 17-4 17 10 22-6 21 4 14-7 27 4 16-6 27 7 17-10 23 1 21-11 32 1 16-11 34 10 25-4 29 13 29 0v126l-35-6-17 8-24-3-30 11-24-7-12-17-28-4-15 8-32-5-16-10-26-5-10 13-26-4-10 13-21-4-11-14-7 12 8 18-12 6-20-17-9-22-17-8-10-19-12 2 4 21 21 22 4 16-10 7-18-24-10-2-8-27-19-15-14 4-16-1-15 13-12 1-8 20-27 3-31-4-20 3Z"/><path d="m311 117-12-8-8-23-13-11 4-17 11-2-3-20 10-12 8 3 2 18 10 12-8 18 14 15 2 17-11 11Z"/><path d="m269 100-12-3-7-16 9-14 13 3 3 15Z"/><path d="m421 69-12-3-2-19 12-21 14-3 9-17 18-6h58l-9 17-19 5-10 20-21 10-8 18-16 10Z"/><path d="m489 63 9-18 3-24 15-9 18-1 6-11h40l-5 22-18 15-10 24-15 8-22-1Z"/><path d="m372 224 15 2 5 9-18 2Z"/><path d="m431 211 6 5-2 20-8 2-5-18Z"/><path d="m487 229 14 7-11 6-20-9Z"/></g>
+              <g class="map-boundaries"><path d="m276 190 7 19-7 24M319 145l22 6 17-12 18 2 5-16 22-3 8-28M358 139l12 17 12 1 7 18M384 112l27 7 18-13 25 11 31-5 12-23M412 154l17-9 24 6 15-17 24 4 13-20 24-9 27 3M455 153l14 12 22-6 22 15 28-2M533 83l13 19 1 24 18 6 5 19 25 3 18-17 28-5M576 67l8 25 23 5 10 18 33-2 19-14"/></g>
+              <g class="map-routes"><path d="M495 105Q402 38 306 115"/><path d="M495 105Q392 61 337 157"/><path d="M495 105Q433 68 395 131"/><path d="M495 105Q419 42 374 108"/><path d="M495 105Q444 111 451 204"/><path d="M495 105Q350 95 299 212"/><path d="M495 105Q493 27 439 27"/><path d="M495 105Q547 71 548 17"/><path d="M495 105Q478 118 471 146"/><path d="M495 105Q440 101 402 160"/></g>
+              <g class="map-destinations"><circle cx="306" cy="115" r="3.3"/><circle cx="337" cy="157" r="3.3"/><circle cx="395" cy="131" r="3.3"/><circle cx="374" cy="108" r="3.3"/><circle cx="451" cy="204" r="3.3"/><circle cx="299" cy="212" r="3.3"/><circle cx="439" cy="27" r="3.3"/><circle cx="548" cy="17" r="3.3"/><circle cx="471" cy="146" r="3.3"/><circle cx="402" cy="160" r="3.3"/></g>
+              <g class="map-labels"><text x="277" y="109">LHR</text><text x="309" y="170">CDG</text><text x="399" y="124">FRA</text><text x="346" y="97">AMS</text><text x="460" y="213">FCO</text><text x="271" y="226">BCN</text><text x="410" y="23">OSL</text><text x="558" y="21">HEL</text><text x="479" y="155">VIE</text><text x="373" y="174">ZRH</text></g>
+              <circle class="hub-halo" cx="495" cy="105" r="18"/><circle cx="495" cy="105" r="10" fill="#3983ff" opacity=".5" filter="url(#hub-glow)"/><circle cx="495" cy="105" r="5.5" fill="#5396ff" stroke="#c4dcff" stroke-width="2"/>
+              <g class="hub-label"><rect x="511" y="77" width="107" height="25" rx="5"/><text x="522" y="94">WAW <tspan dx="4">Warszawa</tspan></text></g>
+              <g class="map-compass"><path d="m767 184 5-17 5 17-5-3Z"/><text x="769" y="160">N</text></g>
+            </svg>
+          </div>
+          <div class="map-footer"><span><i class="legend-dot hub-dot"></i>Port bazowy <i class="legend-dot destination-dot"></i>Kierunki</span><span>Mapa poglądowa <svg class="icon"><use href="#i-info"/></svg></span></div>
+        </div>
+        <div class="panel progress-panel"><div class="panel-heading"><div><h2>Realizacja planu</h2><p>Małe kroki. Pełna perspektywa.</p></div><svg class="icon muted"><use href="#i-check-circle"/></svg></div><div class="progress-content"><div class="donut" role="img" id="progress-chart" aria-label="Zakończono 30 procent lotów"><svg viewBox="0 0 140 140" aria-hidden="true"><circle class="donut-track" cx="70" cy="70" r="59"/><circle class="donut-value" id="progress-ring" cx="70" cy="70" r="59" pathLength="100" stroke-dasharray="100" stroke-dashoffset="70"/></svg><div class="donut-label"><strong id="progress-percent">30<span>%</span></strong><span>zakończonych</span></div></div><div class="progress-legend"><div><span class="mini-dot green-bg"></span>Zakończone<strong id="legend-completed">3</strong></div><div><span class="mini-dot blue-bg"></span>W trakcie<strong id="legend-active">3</strong></div><div><span class="mini-dot amber-bg"></span>Planowane<strong id="legend-planned">4</strong></div></div></div><div class="progress-footer"><svg class="icon"><use href="#i-flights"/></svg><span id="progress-summary"><strong>3 z 10 lotów</strong> już za nami</span><span class="mini-check"><svg class="icon"><use href="#i-check"/></svg></span></div></div>
+      </section>
+
+      <section class="panel flight-panel" id="flight-board" aria-labelledby="board-title">
+        <div class="board-heading"><div><div class="title-with-badge"><h2 id="board-title">Tablica lotów</h2><span class="number-badge" id="board-total">10</span></div><p>Zarządzaj operacjami, zmieniając status przy wybranym rejsie.</p></div><span class="departures-label"><svg class="icon"><use href="#i-flights"/></svg>ODLOTY Z WARSZAWY</span></div>
+        <div class="board-toolbar"><div class="filter-tabs" role="group" aria-label="Filtruj loty według statusu"><button class="filter-tab active" type="button" data-filter="all" aria-pressed="true">Wszystkie <span id="tab-all">10</span></button><button class="filter-tab" type="button" data-filter="planned" aria-pressed="false"><span class="tab-dot amber-bg"></span>Planowane <span id="tab-planned">4</span></button><button class="filter-tab" type="button" data-filter="active" aria-pressed="false"><span class="tab-dot blue-bg"></span>W trakcie <span id="tab-active">3</span></button><button class="filter-tab" type="button" data-filter="completed" aria-pressed="false"><span class="tab-dot green-bg"></span>Zakończone <span id="tab-completed">3</span></button></div><div class="search-field"><svg class="icon"><use href="#i-search"/></svg><label class="sr-only" for="flight-search">Szukaj po numerze lotu, kierunku, linii lub bramce</label><input type="search" id="flight-search" placeholder="Szukaj rejsu lub kierunku…" autocomplete="off" spellcheck="false"><button type="button" id="clear-search" class="clear-search" aria-label="Wyczyść wyszukiwanie" hidden><svg class="icon"><use href="#i-close"/></svg></button><kbd id="search-shortcut" aria-hidden="true">/</kbd></div></div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Tabela odlotów. Na małym ekranie przesuń tabelę w bok."><table><caption class="sr-only">Przykładowe odloty z lotniska Warszawa Chopina. Wybierz status w kolumnie Status, aby go zmienić.</caption><thead><tr><th scope="col">REJS</th><th scope="col">KIERUNEK</th><th scope="col" id="time-heading" aria-sort="ascending"><button type="button" class="sort-button" id="sort-button" aria-label="Odlot: rosnąco. Kliknij, aby sortować malejąco.">ODLOT <svg class="icon"><use href="#i-sort"/></svg></button></th><th scope="col">BRAMKA</th><th scope="col">STATUS <span class="editable-label">/ EDYTUJ</span></th><th scope="col"><span class="sr-only">Szczegóły rejsu</span></th></tr></thead><tbody id="flights-body"></tbody></table></div>
+        <div class="empty-state" id="empty-state" hidden><span class="empty-icon"><svg class="icon"><use href="#i-search"/></svg></span><h3>Tu na razie nie ma lotów</h3><p id="empty-description">Spróbuj innego kierunku lub zmień wybrany filtr.</p><button class="button button-secondary" id="reset-filters" type="button">Wyczyść filtry</button></div>
+        <div class="board-footer"><span class="save-indicator" id="save-indicator"><svg class="icon"><use href="#i-shield"/></svg><span id="save-label">Zmiany zapisywane automatycznie</span></span><span id="results-count" role="status" aria-live="polite">Wyświetlono 10 z 10 lotów</span></div>
+      </section>
+      <footer class="page-footer"><span>SkyControl <span class="footer-dot">·</span> <span id="copyright-year">2026</span> <span class="footer-divider">/</span> Spokojna głowa. Sprawne operacje.</span><span>Panel demonstracyjny <span class="footer-dot">·</span> Czas Warszawy</span></footer>
+    </main>
+  </div>
+
+  <dialog id="details-dialog" class="modal" aria-labelledby="details-title"><div class="modal-header"><span class="modal-eyebrow">SZCZEGÓŁY OPERACJI</span><button class="icon-button" type="button" data-close-dialog aria-label="Zamknij szczegóły"><svg class="icon"><use href="#i-close"/></svg></button></div><h2 id="details-title">Szczegóły lotu</h2><p class="modal-subtitle" id="details-airline"></p><div class="flight-route-detail"><div><strong>WAW</strong><span>Warszawa Chopina</span></div><svg class="icon"><use href="#i-plane"/></svg><div><strong id="details-code"></strong><span id="details-city"></span></div></div><dl class="detail-grid"><div><dt>Godzina odlotu</dt><dd id="details-time"></dd></div><div><dt>Bramka</dt><dd id="details-gate"></dd></div><div><dt>Kraj docelowy</dt><dd id="details-country"></dd></div><div><dt>Data operacji</dt><dd id="details-date"></dd></div></dl><label class="detail-select-label" for="details-status">Status lotu</label><div class="detail-select-wrap"><select id="details-status"><option value="planned">Planowany</option><option value="active">W trakcie</option><option value="completed">Zakończony</option></select><svg class="icon"><use href="#i-down"/></svg></div><p class="modal-hint"><svg class="icon"><use href="#i-info"/></svg>Zmiana statusu od razu aktualizuje tablicę i liczniki.</p><button class="button button-primary modal-done" type="button" data-close-dialog>Gotowe <svg class="icon"><use href="#i-check"/></svg></button></dialog>
+
+  <dialog id="history-dialog" class="modal history-modal" aria-labelledby="history-title"><div class="modal-header"><span class="modal-eyebrow">TWÓJ DZIENNIK</span><button class="icon-button" type="button" data-close-dialog aria-label="Zamknij dziennik"><svg class="icon"><use href="#i-close"/></svg></button></div><h2 id="history-title">Dziennik operacji</h2><p class="modal-subtitle">Ostatnie 30 zmian statusów w tej przeglądarce.</p><ol class="history-list" id="history-list"></ol><button class="button button-secondary modal-done" type="button" data-close-dialog>Zamknij dziennik</button></dialog>
+
+  <dialog id="help-dialog" class="modal help-modal" aria-labelledby="help-title"><div class="modal-header"><span class="modal-eyebrow">WITAJ W SKYCONTROL</span><button class="icon-button" type="button" data-close-dialog aria-label="Zamknij pomoc"><svg class="icon"><use href="#i-close"/></svg></button></div><h2 id="help-title">Twoje centrum dowodzenia.</h2><p class="modal-subtitle">Wszystko, czego potrzebujesz, żeby zacząć.</p><div class="help-step"><span>01</span><div><h3>Znajdź swój lot</h3><p>Wpisz numer rejsu, miasto, kod lotniska, linię lub bramkę. Zakładki nad tabelą filtrują loty według statusu.</p></div></div><div class="help-step"><span>02</span><div><h3>Zmień status jednym kliknięciem</h3><p>Kliknij kolorowe pole w kolumnie „Status” i wybierz: Planowany, W trakcie lub Zakończony. Strzałka na końcu wiersza otwiera szczegóły.</p></div></div><div class="help-step"><span>03</span><div><h3>Wróć do swoich ustawień</h3><p>Statusy, dziennik i motyw zapisują się automatycznie w tej przeglądarce. Przycisk „Eksportuj CSV” pobiera zestawienie wszystkich 10 lotów.</p></div></div><div class="help-note"><svg class="icon"><use href="#i-info"/></svg><p>To demonstracja, a nie rzeczywiste dane lotniska. Zmiany nie są współdzielone między urządzeniami. Tryb prywatny lub wyczyszczenie danych przeglądarki może usunąć zapis.</p></div><a class="button button-secondary modal-done" href="INSTRUKCJA.html" target="_blank" rel="noopener">Uruchomienie i publikacja <svg class="icon"><use href="#i-arrow"/></svg></a></dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden><span class="toast-icon"><svg class="icon"><use href="#i-check"/></svg></span><span id="toast-message"></span><button class="icon-button" id="dismiss-toast" type="button" aria-label="Zamknij powiadomienie"><svg class="icon"><use href="#i-close"/></svg></button></div>
+</body>
+</html>

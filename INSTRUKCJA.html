@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyControl — prosta instrukcja</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    * { box-sizing: border-box; } body { margin: 0; padding: 40px 22px; background: #0c111b; color: #eaf0fb; font: 16px/1.85 system-ui, sans-serif; } main { max-width: 790px; margin: auto; } a { color: #85b3ff; text-underline-offset: 4px; } .brand { display: inline-block; margin-bottom: 35px; font-size: 22px; font-weight: 650; text-decoration: none; } .eyebrow { color: #85b3ff; font-size: 12px; letter-spacing: 2px; } h1 { margin: 8px 0 18px; font-size: clamp(30px, 6vw, 46px); line-height: 1.2; letter-spacing: -1.5px; } h2 { font-size: 23px; line-height: 1.4; margin: 0 0 18px; } p { color: #b0bdd3; } section { margin: 28px 0; padding: 28px; border: 1px solid #273349; background: #121a27; border-radius: 14px; } li { padding-left: 5px; margin-bottom: 13px; color: #b0bdd3; } strong { color: #eaf0fb; } code { font-size: .9em; color: #9cc2ff; background: #1b2b43; padding: 3px 6px; border-radius: 4px; overflow-wrap: anywhere; } ol, ul { padding-left: 23px; } .note { padding: 16px 19px; border-left: 3px solid #4a8cff; border-radius: 0 7px 7px 0; background: #387df510; color: #b8cae7; font-size: 14px; } .button { display: inline-block; background: #387df5; color: white; padding: 10px 19px; border-radius: 7px; text-decoration: none; font-weight: 550; margin-top: 10px; } footer { font-size: 13px; color: #7e8ca5; margin: 30px 0; } :focus-visible { outline: 2px solid #85b3ff; outline-offset: 4px; } @media(max-width: 550px) { body { padding: 25px 16px; font-size: 14px; } section { padding: 21px 18px; } h2 { font-size: 21px; } }
+  </style>
+</head>
+<body><main>
+  <a class="brand" href="index.html">↗ SkyControl</a>
+  <p class="eyebrow">OD PIERWSZEGO KLIKNIĘCIA DO WŁASNEGO LINKU</p>
+  <h1>Gotowe. Możesz startować.</h1>
+  <p>Ten projekt jest kompletny. Nie musisz pisać kodu, instalować programów dla programistów ani płacić za hosting. Poniżej znajdziesz całą instrukcję.</p>
+
+  <section>
+    <h2>1. Uruchom stronę na komputerze</h2>
+    <ol>
+      <li>Pobierz plik <strong>SkyControl.zip</strong> i znajdź go w folderze „Pobrane”.</li>
+      <li><strong>Rozpakuj archiwum.</strong> W Windows kliknij je prawym przyciskiem myszy i wybierz „Wyodrębnij wszystkie…”, a następnie „Wyodrębnij”. Na Macu kliknij plik ZIP dwa razy.</li>
+      <li>Otwórz rozpakowany folder <strong>SkyControl</strong>. Znajdziesz w nim m.in. <code>index.html</code>, <code>styles.css</code> i <code>app.js</code>.</li>
+      <li>Kliknij dwa razy <strong>index.html</strong>. Strona otworzy się w Twojej domyślnej przeglądarce. Jeżeli otworzy się edytor tekstu, kliknij plik prawym przyciskiem → „Otwórz za pomocą” → Chrome, Edge, Firefox lub Safari.</li>
+      <li>Gotowe! Wybierz nowy status dowolnego rejsu i odśwież stronę. Zmiana powinna pozostać.</li>
+    </ol>
+    <p class="note">Nie otwieraj strony bezpośrednio wewnątrz archiwum ZIP. Najpierw je rozpakuj. Wszystkie pliki projektu muszą pozostać razem w tym samym folderze. Do działania strony nie potrzebujesz internetu.</p>
+    <a class="button" href="index.html">Otwórz SkyControl →</a>
+  </section>
+
+  <section>
+    <h2>2. Poznaj panel</h2>
+    <ul>
+      <li><strong>Zegar i data:</strong> pokazują aktualny czas w Warszawie. Zegar aktualizuje się co sekundę.</li>
+      <li><strong>Kolorowe statusy:</strong> bursztynowy to „Planowany”, niebieski to „W trakcie”, zielony to „Zakończony”. Kliknij kolorowe pole przy rejsie, aby zmienić status.</li>
+      <li><strong>Wyszukiwarka:</strong> wpisz np. „Londyn”, „LO281”, „Paryz”, „LHR”, nazwę linii albo bramkę. Polskie znaki nie są wymagane. Przycisk × czyści wpis.</li>
+      <li><strong>Filtry:</strong> wybierz „Wszystkie”, „Planowane”, „W trakcie” lub „Zakończone”. Filtr i wyszukiwarka działają jednocześnie. Aby wrócić do pełnej listy, wyczyść wyszukiwarkę i wybierz „Wszystkie”.</li>
+      <li><strong>Sortowanie:</strong> kliknij nagłówek „Odlot”, aby odwrócić kolejność godzin.</li>
+      <li><strong>Szczegóły:</strong> strzałka na końcu wiersza pokazuje informacje o rejsie. Tam również możesz zmienić status.</li>
+      <li><strong>Liczniki i wykres:</strong> przeliczają się automatycznie po każdej zmianie. Zawsze pokazują wszystkie loty, także podczas wyszukiwania.</li>
+      <li><strong>Motyw:</strong> przycisk słońca/księżyca w prawym górnym rogu zmienia wygląd na jasny lub ciemny.</li>
+      <li><strong>Dziennik operacji:</strong> pokazuje 30 ostatnich zmian statusów, wraz z czasem ich wykonania.</li>
+      <li><strong>Eksportuj CSV:</strong> pobiera aktualne zestawienie wszystkich 10 lotów. Plik można otworzyć w Excelu, LibreOffice Calc lub zaimportować do Arkuszy Google. Jeśli program pyta o ustawienia, wybierz UTF-8 i separator „średnik”.</li>
+      <li><strong>Telefon:</strong> menu otworzysz przyciskiem ☰ w lewym górnym rogu. Tabelę można przesuwać palcem w bok, aby zobaczyć statusy i szczegóły.</li>
+      <li><strong>Klawiatura:</strong> klawisz Tab przechodzi między przyciskami. „/” przenosi do wyszukiwarki. Escape zamyka okno lub menu, a w wyszukiwarce czyści wpis.</li>
+    </ul>
+    <p class="note">To przykładowy panel, a nie połączenie z systemem lotniska. Numery, godziny, bramki i statusy są fikcyjne. Loty nie zmieniają statusów samoczynnie ani nie resetują się następnego dnia.</p>
+  </section>
+
+  <section>
+    <h2>3. Opublikuj bezpłatnie na GitHub Pages</h2>
+    <p>Potrzebujesz bezpłatnego konta GitHub. Całość zrobisz w przeglądarce, bez terminala i bez pisania kodu.</p>
+    <ol>
+      <li>Wejdź na <a href="https://github.com" target="_blank" rel="noopener noreferrer">github.com</a>. Zaloguj się lub wybierz <strong>Sign up</strong>, aby założyć konto. Jeśli GitHub poprosi o potwierdzenie adresu e-mail, wykonaj ten krok.</li>
+      <li>Otwórz <a href="https://github.com/new" target="_blank" rel="noopener noreferrer">github.com/new</a>, czyli formularz tworzenia repozytorium. Repozytorium to po prostu folder projektu w internecie.</li>
+      <li>W polu <strong>Repository name</strong> wpisz <code>skycontrol</code>. Wybierz <strong>Public</strong> — publiczne repozytorium umożliwia bezpłatne korzystanie z GitHub Pages w planie Free. Włącz opcję <strong>Add a README file</strong> (w niektórych wersjach interfejsu „Add README”) i kliknij <strong>Create repository</strong>.</li>
+      <li>Na stronie nowego repozytorium kliknij <strong>Add file → Upload files</strong>. Na wąskim ekranie „Add file” może być schowane pod przyciskiem „+”.</li>
+      <li>Otwórz rozpakowany folder SkyControl na komputerze. Przeciągnij <strong>jego pliki</strong> do okna przesyłania w GitHub: <code>index.html</code>, <code>styles.css</code>, <code>app.js</code>, <code>favicon.svg</code> i <code>INSTRUKCJA.html</code>. Możesz też dodać <code>README.md</code> — zastąpi początkowy opis.</li>
+      <li>Na dole strony kliknij <strong>Commit changes</strong> (a jeśli pojawi się dodatkowe okno — potwierdź przyciskiem o tej samej nazwie). To zapisuje pliki w repozytorium, zwykle w gałęzi <strong>main</strong>.</li>
+      <li>Sprawdź, czy <strong>index.html jest widoczny od razu na głównej liście plików repozytorium</strong>. Nie powinien być schowany w dodatkowym folderze „SkyControl”. Nie przesyłaj samego pliku ZIP.</li>
+      <li>W górnym menu repozytorium kliknij <strong>Settings</strong>, a następnie wybierz <strong>Pages</strong> w menu po lewej stronie. Na małym ekranie możesz potrzebować rozwinąć menu.</li>
+      <li>W sekcji <strong>Build and deployment</strong> przy <strong>Source</strong> wybierz <strong>Deploy from a branch</strong>. W części <strong>Branch</strong> wybierz <strong>main</strong> oraz <strong>/(root)</strong>, po czym kliknij <strong>Save</strong>. Jeśli Twoja gałąź ma inną nazwę, wybierz tę, w której widzisz pliki projektu.</li>
+      <li>Poczekaj kilka minut i odśwież <strong>Settings → Pages</strong>. GitHub pokaże link oraz przycisk <strong>Visit site</strong>. Pierwsza publikacja może potrwać do około 10 minut.</li>
+      <li>Twój adres będzie zwykle wyglądać tak: <code>https://TWOJ-LOGIN.github.io/skycontrol/</code>. Zastąp „TWOJ-LOGIN” nazwą swojego konta lub po prostu skopiuj gotowy adres z GitHub. Wyślij go sobie na telefon i otwórz w zwykłej przeglądarce.</li>
+    </ol>
+    <p class="note">Opublikowana strona i pliki publicznego repozytorium są dostępne dla każdego, kto do nich dotrze. W projekcie są wyłącznie dane przykładowe. Nie potrzebujesz własnej domeny, płatnej usługi ani bazy danych.</p>
+  </section>
+
+  <section>
+    <h2>4. Gdzie zapisują się zmiany?</h2>
+    <p>Strona korzysta z <strong>localStorage</strong>, czyli małej pamięci przeglądarki. Zapisuje statusy lotów, ostatnie 30 zmian i wybrany motyw. Odświeżenie strony nie usuwa tych ustawień.</p>
+    <ul>
+      <li><strong>Każde urządzenie ma osobny zapis.</strong> Zmiana na komputerze nie pojawi się na telefonie. Różne przeglądarki również mają osobne zapisy.</li>
+      <li>Wersja otwarta z pliku na komputerze i wersja pod linkiem GitHub Pages mają osobne dane.</li>
+      <li>Tryb incognito/prywatny może usunąć zapis po zamknięciu okna. Wyczyszczenie danych witryny także usuwa zapis.</li>
+      <li>Jeśli przeglądarka blokuje zapis, panel wyświetli ostrzeżenie i nadal będzie działać, ale zmiany będą dostępne tylko w bieżącej sesji.</li>
+      <li>Obsługa pamięci dla plików otwieranych bezpośrednio z dysku może różnić się między przeglądarkami. Jeśli zapis lokalny nie działa, otwórz projekt pod linkiem GitHub Pages. Nie przenoś folderu projektu, jeśli chcesz zachować dotychczasowy zapis wersji lokalnej.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Gdy coś nie działa</h2>
+    <ul>
+      <li><strong>Widzę tekst zamiast strony:</strong> otwórz <code>index.html</code> przeglądarką, nie edytorem tekstowym.</li>
+      <li><strong>Strona nie ma kolorów lub nie pokazuje lotów:</strong> rozpakuj ZIP. Sprawdź, czy <code>styles.css</code> i <code>app.js</code> leżą obok <code>index.html</code>. W przeglądarce musi być włączony JavaScript.</li>
+      <li><strong>GitHub pokazuje błąd 404:</strong> sprawdź ustawienia Pages, gałąź i <code>/(root)</code>. Sprawdź, czy plik nazywa się dokładnie <code>index.html</code> i leży na głównej liście plików. Zaczekaj do 10 minut. W zakładce <strong>Actions</strong> można sprawdzić, czy publikacja się zakończyła.</li>
+      <li><strong>Nie widzę zmian po przesłaniu nowszych plików:</strong> zaczekaj na zakończenie publikacji, a następnie odśwież stronę. Na komputerze możesz użyć Ctrl+F5 lub na Macu Cmd+Shift+R.</li>
+      <li><strong>Nie widzę statusu na telefonie:</strong> przesuń tabelę poziomo. Możesz też obrócić telefon.</li>
+    </ul>
+    <p>Aby opublikować później nową wersję, ponownie użyj <strong>Add file → Upload files</strong>, prześlij zmienione pliki o tych samych nazwach i kliknij <strong>Commit changes</strong>. GitHub Pages zaktualizuje stronę automatycznie.</p>
+  </section>
+  <footer>SkyControl · HTML + CSS + JavaScript · Bez instalacji i zależności</footer>
+</main></body>
+</html>
